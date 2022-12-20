@@ -8,5 +8,27 @@
 		<a href="#" onclick="gigya.accounts.showScreenSet({screenSet:'Default-LiteRegistration'});">Subscribe Here!</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
 		<a href="#" onclick="gigya.accounts.showScreenSet({screenSet:'Default-RegistrationLogin', startScreen:'gigya-register-screen'});">Register</a>&nbsp;&nbsp;|&nbsp;&nbsp; 
 		<a href="#" onclick="gigya.accounts.showScreenSet({screenSet:'Default-RegistrationLogin'});">Login</a> 
+		<span id="logout" hidden> &nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" onclick="logout();">Logout</a> </span>
 	</body> 
+	<script type="text/javascript" lang="javascript"> // calls logout and then hides the logout link if the logout succeeds 
+		function logout() { 
+			gigya.accounts.logout({callback:function (response) { 
+				if (response.errorCode == 0) { 
+					document.getElementByid("logout").hidden=true; 
+				} else { 
+					alert('Error:' + response.errorMessage); 
+				} 
+			}}); 
+		} 
+		// if there's a user logged in then shows the logout link 
+		gigya.accounts.getAccountinfo({callback:function (response) { 
+			if (response.errorCode == 0) { 
+				document.getElementByid("logout").hidden=false; 
+			} 
+		}}); 
+		// traps the login event to show the logout link 
+		gigya.socialize.addEventHandlers({ onLogin: function () { 
+			document.getElementByid("logout").hidden=false; 
+		} });
+	</script> 
 </html> 	
